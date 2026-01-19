@@ -1,0 +1,19 @@
+services:
+  netbird:
+      container_name: netbird
+      hostname: ubuntu-server
+      cap_add:
+          - NET_ADMIN
+          - SYS_ADMIN
+          - SYS_RESOURCE
+      network_mode: host
+      environment:
+          - NB_SETUP_KEY=${NETBIRD_KEY}
+          - NB_ALLOW_SERVER_SSH=true
+      volumes:
+          - netbird-client:/var/lib/netbird
+      image: netbirdio/netbird:latest
+      restart: unless-stopped
+volumes:
+  netbird-client:
+      name: netbird-client

@@ -1,0 +1,34 @@
+services:
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    ports:
+      - 8090:8090
+    volumes:
+      - /srv/beszel/beszel_data:/beszel_data
+      - /srv/beszel/beszel_socket:/beszel_socket
+    networks:
+      - frontend
+    dns:
+      - 10.1.1.200
+      - 10.1.1.1
+
+  # beszel-agent:
+  #   image: henrygd/beszel-agent:latest
+  #   container_name: beszel-agent
+  #   restart: unless-stopped
+  #   network_mode: host
+  #   volumes:
+  #     - /srv/beszel/beszel_agent_data:/var/lib/beszel-agent
+  #     - /srv/beszel/beszel_socket:/beszel_socket
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #   environment:
+  #     LISTEN: /beszel_socket/beszel.sock
+  #     HUB_URL: http://localhost:8090
+  #     TOKEN: 2331-8d3566e02c-392-93de4fc4052
+  #     KEY: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHNNvYOtsDodLy0FCLlV97DKJ9VY03QCQUe3NjP2SlhP"
+
+networks:
+  frontend:
+    external: true

@@ -1,0 +1,48 @@
+services:
+  wiki-db:
+    image: postgres:15-alpine
+    container_name: wiki-db
+    environment:
+      POSTGRES_DB: wiki
+      POSTGRES_PASSWORD: wikijsrocks
+      POSTGRES_USER: wikijs
+   #   POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "wikijs"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    labels:
+      promtail_exclude: "true"
+    logging:
+      driver: none
+    restart: unless-stopped
+    volumes:
+      - /srv/wiki-db:/var/lib/postgresql/data
+    networks:
+      backend: {}
+
+  wiki:
+    image: ghcr.io/requarks/wiki:2.5
+    container_name: wiki
+    depends_on:
+      wiki-db:
+        condition: service_healthy
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: wiki-db
+      DB_PORT: 5432
+      DB_USER: wikijs
+      DB_PASS: wikijsrocks
+      DB_NAME: wiki
+    restart: unless-stopped
+    networks:
+      backend: {}
+      frontend: {}
+
+networks:
+  backend:
+    external: true
+  frontend:
+    external: true

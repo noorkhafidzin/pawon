@@ -1,0 +1,34 @@
+services:
+  jdownloader2:
+    image: jlesage/jdownloader-2
+    container_name: JDownloader-2
+    hostname: jdownloader2
+    mem_limit: 8g
+    cpu_shares: 2048
+    security_opt:
+      - no-new-privileges:true
+      - seccomp:unconfined
+    ports:
+      - 3129:3129
+      - 5800:5800
+      - 5900:5900
+    volumes:
+      - /srv/jdownloader2/config:/config:rw
+      - /mnt/cc/Downloads:/Downloads:rw
+    environment:
+      TZ: Asia/jakarta
+      USER_ID: 1000
+      GROUP_ID: 100
+      UMASK: 0000        # File: 666 (rw-rw-rw-), Folder: 777 (rwxrwxrwx)
+      DARK_MODE: 1       # Type in 0 instead of 1 if you want a light theme
+      WEB_LISTENING_PORT: 5800
+      JDOWNLOADER_HEADLESS: 1
+      JDOWNLOADER_MAX_MEM: 800M
+    restart: always
+
+    networks:
+      frontend: {}
+
+networks:
+  frontend:
+    external: true

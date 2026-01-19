@@ -1,0 +1,183 @@
+---
+###############################################################
+#                   Authelia configuration                    #
+###############################################################
+
+server:
+  address: "tcp://:9091"
+
+log:
+  level: "debug"
+
+totp:
+  issuer: "authelia.com"
+
+identity_validation:
+  reset_password:
+    jwt_secret: "a_very_important_secret"
+
+# duo_api:
+#  hostname: api-123456789.example.com
+#  integration_key: ABCDEF
+#  # This secret can also be set using the env variables AUTHELIA_DUO_API_SECRET_KEY_FILE
+#  secret_key: 1234567890abcdefghifjkl
+
+authentication_backend:
+  file:
+    path: "/config/users_database.yml"
+
+access_control:
+  default_policy: "deny"
+  rules:
+    # Rules applied to everyone
+    - domain: "public.home.noorkhafidzin.com"
+      policy: "bypass"
+    - domain: "traefik.home.noorkhafidzin.com"
+      policy: "one_factor"
+    - domain: "secure.home.noorkhafidzin.com"
+      policy: "two_factor"
+    - domain: "dozzle.home.noorkhafidzin.com"
+      policy: "one_factor"
+    - domain: "portainer.noorkhafidzin.com"
+      policy: "one_factor"
+session:
+  # This secret can also be set using the env variables AUTHELIA_SESSION_SECRET_FILE
+  secret: "insecure_session_secret"
+
+  cookies:
+    - name: "authelia_session"
+      domain: "noorkhafidzin.com" # Should match whatever your root protected domain is
+      authelia_url: "https://auth.home.noorkhafidzin.com"
+      expiration: "1 hour"
+      inactivity: "5 minutes"
+    - name: "authelia_session"
+      domain: "zynji.com" # Should match whatever your root protected domain is
+      authelia_url: "https://auth.home.zynji.com"
+      expiration: "1 hour"
+      inactivity: "5 minutes"
+
+  redis:
+    host: "redis"
+    port: 6379
+    # This secret can also be set using the env variables AUTHELIA_SESSION_REDIS_PASSWORD_FILE
+    # password: authelia
+
+regulation:
+  max_retries: 3
+  find_time: "2 minutes"
+  ban_time: "5 minutes"
+
+storage:
+  encryption_key: "a_very_important_encryption_key"
+  local:
+    path: "/config/db.sqlite3"
+
+notifier:
+  disable_startup_check: false
+  smtp:
+    address: "submission://smtp-relay.brevo.com:2525"
+    username: ""
+    password: ""
+    sender: "admin@noorkhafidzin.com"
+  
+  # gmail
+  # smtp:
+  #   address: "submission://smtp.gmail.com:587"
+  #   username: "@gmail.com"
+  #   password: ""
+  #   sender: "admin@noorkhafidzin.com"
+  #
+
+  # filesystem:
+  #   filename: "/config/notification.txt"
+
+  # smtp:
+  #   username: 'test'
+  #   # This secret can also be set using the env variables AUTHELIA_NOTIFIER_SMTP_PASSWORD_FILE
+  #   password: 'password'
+  #   address: 'smtp://mail.example.com:25'
+  #   sender: 'admin@example.com'
+
+identity_providers:
+  oidc:
+    hmac_secret: "a_very_important_secret"
+    
+    jwks:
+      - key_id: "authelia-key-rs256"
+        algorithm: "RS256"
+        use: "sig"
+
+        key: |
+          -----BEGIN PRIVATE KEY-----
+          ...
+          -----END PRIVATE KEY-----
+
+        certificate_chain: |
+          -----BEGIN CERTIFICATE-----
+          ...
+          -----END CERTIFICATE-----
+
+    clients:
+      - client_id: "portainer"
+        client_name: "Portainer"
+        client_secret: "" # The digest of 'insecure_secret'.
+        public: false
+        authorization_policy: "one_factor"
+        require_pkce: false
+        pkce_challenge_method: ""
+        redirect_uris:
+          - "https://portainer.noorkhafidzin.com/"
+        scopes:
+          - "openid"
+          - "profile"
+          - "groups"
+          - "email"
+        response_types:
+          - "code"
+        grant_types:
+          - "authorization_code"
+        access_token_signed_response_alg: "none"
+        userinfo_signed_response_alg: "none"
+        token_endpoint_auth_method: "client_secret_post"
+
+      - client_id: "beszel"
+        client_name: "Beszel"
+        client_secret: "" # The digest of 'insecure_secret'.
+        public: false
+        authorization_policy: "two_factor"
+        require_pkce: true
+        pkce_challenge_method: "S256"
+        redirect_uris:
+          - "https://beszel.home.noorkhafidzin.com/api/oauth2-redirect"
+        scopes:
+          - "openid"
+          - "email"
+          - "profile"
+        response_types:
+          - "code"
+        grant_types:
+          - "authorization_code"
+        access_token_signed_response_alg: "none"
+        userinfo_signed_response_alg: "none"
+        token_endpoint_auth_method: "client_secret_basic"
+
+      - client_id: "jellyfin"
+        client_name: "Jellyfin"
+        client_secret: "" # The digest of 'insecure_secret'.
+        public: false
+        authorization_policy: "two_factor"
+        require_pkce: true
+        pkce_challenge_method: "S256"
+        redirect_uris:
+          - "https://jellyfin.home.noorkhafidzin.com/sso/OID/redirect/authelia"
+        scopes:
+          - "openid"
+          - "profile"
+          - "groups"
+        response_types:
+          - "code"
+        grant_types:
+          - "authorization_code"
+        access_token_signed_response_alg: "none"
+        userinfo_signed_response_alg: "none"
+        token_endpoint_auth_method: "client_secret_post"

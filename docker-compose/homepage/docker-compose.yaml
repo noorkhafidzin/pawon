@@ -1,0 +1,21 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    ports:
+      - 3001:3000
+    networks:
+      - frontend
+    volumes:
+      - /srv/homepage:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/cc:/mnt/cc:ro
+      - /mnt/erb:/mnt/erb:ro
+    restart: unless-stopped
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: hp.home.noorkhafidzin.com,10.1.1.11:3001
+
+networks:
+  frontend:
+    external: true

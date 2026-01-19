@@ -1,0 +1,60 @@
+services:
+  jellystat-db:
+    image: postgres:15.2
+    container_name: Jellystat-DB
+    hostname: jellystat-db
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "jfstat", "-U", "postgres"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    volumes:
+      - /srv/jellystat/db:/var/lib/postgresql/data:rw
+    environment:
+      POSTGRES_DB: jfstat
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: jellystatpass
+    restart: unless-stopped
+    networks:
+      - net
+    
+  jellystat:
+    image: cyfershepard/jellystat:latest
+    container_name: Jellystat
+    healthcheck:
+      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/3000' || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s  
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: jellystatpass
+      POSTGRES_IP: jellystat-db
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: jfstat
+      JWT_SECRET: a-very-secure-and-random-secret
+      IS_EMBY_API: false # Set to true if you use Emby instead of Jellyfin.
+      TZ: Asia/Jakarta
+    volumes:
+      - /srv/jellystat/backup:/app/backend/backup-data:rw
+    ports:
+      - 3791:3000
+    depends_on:
+      jellystat-db:
+        condition: service_healthy
+    restart: unless-stopped
+    # dns:
+    #   - 10.1.1.200
+    #   - 10.1.1.1
+    networks:
+      - net
+      - frontend
+
+networks:
+  frontend:
+    external: true
+  net:
+    driver: bridge

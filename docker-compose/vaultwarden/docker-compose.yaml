@@ -1,0 +1,19 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      DOMAIN: "https://vault.noorkhafidzin.com"
+      ADMIN_TOKEN: ""
+    volumes:
+      - /srv/Vaultwarden/:/config/
+      - /srv/Vaultwarden/data/:/data/
+    ports:
+      - 86:80
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true

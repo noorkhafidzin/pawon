@@ -1,0 +1,13 @@
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: dozzle
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro 
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    external: true

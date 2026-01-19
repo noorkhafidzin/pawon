@@ -1,0 +1,26 @@
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Asia/Jakarta
+    volumes:
+      - /srv/jellyfin:/config
+      - /mnt/cc/Videos:/cc/Videos
+      - /mnt/erb/Videos:/erb/Videos
+    ports:
+      - 8096:8096
+      - 8920:8920
+      - 7359:7359/udp
+      - 1900:1900/udp
+    devices:
+      - /dev/dri:/dev/dri
+    restart: unless-stopped
+    networks:
+      frontend: {}
+
+networks:
+  frontend:
+    external: true

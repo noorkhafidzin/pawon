@@ -1,0 +1,67 @@
+services:
+  immich:
+    image: ghcr.io/imagegenius/immich:latest
+    container_name: immich
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - DB_HOSTNAME=postgres14
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_DATABASE_NAME=immich
+      - REDIS_HOSTNAME=valkey
+      - DB_PORT=5432
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=80
+    volumes:
+      - /srv/immich/config:/config
+      - /mnt/cc/Immich/photos:/photos
+      - /mnt/cc/Immich/libraries:/libraries
+    ports:
+      - 83:80
+    restart: unless-stopped
+    depends_on:
+      - postgres14
+      - valkey
+    networks:
+      net:
+      frontend:
+
+  valkey:
+    image: valkey/valkey:8-bookworm
+    container_name: immich-valkey
+    restart: unless-stopped
+    command: valkey-server --bind 0.0.0.0 --port 6379
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      net:
+
+  postgres14:
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
+    container_name: immich-postgres14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: immich
+    volumes:
+      - /srv/immich/postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d immich"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      net:
+
+networks:
+  net:
+  frontend:
+    external: true

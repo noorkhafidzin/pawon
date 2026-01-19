@@ -1,0 +1,21 @@
+services:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8083:8080
+    networks:
+      - backend
+      - n8n_n8n
+      - wikijs_net
+      - immich_net
+
+networks:
+  backend:
+    external: true
+  n8n_n8n:
+    external: true
+  wikijs_net:
+    external: true
+  immich_net:
+    external: true
