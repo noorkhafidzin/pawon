@@ -5,6 +5,7 @@ services:
       - 8080:80
     environment:
       GOTIFY_DEFAULTUSER_PASS: 'admin'
+      TZ: 'Asia/Jakarta'
     volumes:
       - './gotify_data:/app/data'
     # to run gotify as a dedicated user:
