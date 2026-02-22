@@ -3,6 +3,7 @@ services:
     image: gotify/server
     ports:
       - 8080:80
+    restart: unlesss-stopped
     environment:
       GOTIFY_DEFAULTUSER_PASS: 'admin'
       TZ: 'Asia/Jakarta'
