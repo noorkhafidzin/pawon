@@ -23,7 +23,7 @@ Plugin:
 Custom css:
 - Login disclaimer:
   ```html
-  Buat akun ke <a href="https://wizarr.home.noorkhafidzin.com/j/DAPTARCUY">sini</a>.
+  Buat akun ke <a href="https://wizarr.home.xxx/j/DAPTARCUY">sini</a>.
   ```
 - Custom css:
   ```css
