@@ -14,8 +14,8 @@ services:
     user: 1000:1000
     volumes:
       - /var/cache/ntfy:/var/cache/ntfy
-      - /srv/ntfy:/etc/ntfy
-      - /srv/ntfy/data:/var/lib/ntfy
+      - /ntfy:/etc/ntfy
+      - /ntfy/data:/var/lib/ntfy
     ports:
       - 87:80
     healthcheck:

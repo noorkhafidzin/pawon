@@ -7,7 +7,7 @@ services:
     networks:
       - frontend
     volumes:
-      - /srv/homepage:/app/config
+      - ./homepage:/app/config
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/localtime:/etc/localtime:ro
       - /mnt/cc:/mnt/cc:ro

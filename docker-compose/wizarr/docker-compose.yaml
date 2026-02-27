@@ -5,7 +5,7 @@ services:
     ports:
       - 5690:5690
     volumes:
-      - /srv/wizarr:/data
+      - ./wizarr:/data
     environment:
       - PUID=1000 #Set UID
       - PGID=1000 #Set GID

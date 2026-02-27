@@ -6,7 +6,7 @@ services:
       - NET_ADMIN
       - NET_RAW
     volumes:
-      - /srv/homeassistant/config:/config
+      - ./homeassistant/config:/config
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:rw
     restart: unless-stopped

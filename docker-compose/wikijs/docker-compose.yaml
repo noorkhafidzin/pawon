@@ -19,7 +19,7 @@ services:
       driver: none
     restart: unless-stopped
     volumes:
-      - /srv/wiki-db:/var/lib/postgresql/data
+      - ./wiki-db:/var/lib/postgresql/data
     networks:
       backend: {}
 

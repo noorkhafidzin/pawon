@@ -11,7 +11,7 @@ services:
       interval: 10s
       retries: 10
     volumes:
-      - /srv/jellystat/db:/var/lib/postgresql/data:rw
+      - ./jellystat/db:/var/lib/postgresql/data:rw
     environment:
       POSTGRES_DB: jfstat
       POSTGRES_USER: postgres
@@ -39,7 +39,7 @@ services:
       IS_EMBY_API: false # Set to true if you use Emby instead of Jellyfin.
       TZ: Asia/Jakarta
     volumes:
-      - /srv/jellystat/backup:/app/backend/backup-data:rw
+      - ./jellystat/backup:/app/backend/backup-data:rw
     ports:
       - 3791:3000
     depends_on:

@@ -7,7 +7,7 @@ services:
     #  - 3000:3000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /srv/dockhand:/app/data
+      - ./dockhand:/app/data
       - /home/el/docker-compose-blueprints:/app/data/docker-compose
     networks:
       - frontend

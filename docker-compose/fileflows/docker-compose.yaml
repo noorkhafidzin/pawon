@@ -13,8 +13,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /mnt/erb/tmp/fileflow:/temp
-      - /srv/fileflows/data:/app/Data
-      - /srv/fileflows/logs:/app/Logs
+      - ./fileflows/data:/app/Data
+      - ./fileflows/logs:/app/Logs
       - /mnt/erb/Videos:/media/erb/Videos
       - /mnt/cc/Videos:/media/cc/Videos
     networks:

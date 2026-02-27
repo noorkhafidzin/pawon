@@ -17,7 +17,7 @@ services:
       - SERVER_HOST=0.0.0.0
       - SERVER_PORT=80
     volumes:
-      - /srv/immich/config:/config
+      - ./immich/config:/config
       - /mnt/cc/Immich/photos:/photos
       - /mnt/cc/Immich/libraries:/libraries
     ports:
@@ -51,7 +51,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: immich
     volumes:
-      - /srv/immich/postgres:/var/lib/postgresql/data
+      - ./immich/postgres:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d immich"]

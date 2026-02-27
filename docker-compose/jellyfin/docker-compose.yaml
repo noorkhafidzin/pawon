@@ -7,7 +7,7 @@ services:
       - PGID=100
       - TZ=Asia/Jakarta
     volumes:
-      - /srv/jellyfin:/config
+      - ./jellyfin:/config
       - /mnt/cc/Videos:/cc/Videos
       - /mnt/erb/Videos:/erb/Videos
     ports:

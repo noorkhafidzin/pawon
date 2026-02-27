@@ -9,7 +9,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - /srv/syncthing/config:/config
+      - ./syncthing/config:/config
       - /mnt/erb:/mnt/erb
     ports:
       - 8384:8384

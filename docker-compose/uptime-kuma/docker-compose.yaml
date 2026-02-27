@@ -6,7 +6,7 @@ services:
     ports:
       - "3002:3001"
     volumes:
-      - /srv/uptime-kuma:/app/data
+      - ./uptime-kuma:/app/data
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       - TZ=Asia/Jakarta

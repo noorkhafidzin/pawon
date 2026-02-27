@@ -6,8 +6,8 @@ services:
     ports:
       - 8090:8090
     volumes:
-      - /srv/beszel/beszel_data:/beszel_data
-      - /srv/beszel/beszel_socket:/beszel_socket
+      - ./beszel/beszel_data:/beszel_data
+      - ./beszel/beszel_socket:/beszel_socket
     networks:
       - frontend
     dns:

@@ -15,7 +15,7 @@ services:
       POSTGRES_PASSWORD: n8n_password
       POSTGRES_DB: n8n_db
     volumes:
-      - /srv/n8n/n8n_postgres_data:/var/lib/postgresql/data
+      - ./n8n_postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
@@ -50,8 +50,8 @@ services:
       GENERIC_TIMEZONE: Asia/Jakarta
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /srv/n8n/n8n_data:/home/node/.n8n
-      - /srv/n8n/local-files:/files
+      - ./n8n_data:/home/node/.n8n
+      - ./local-files:/files
 
 networks:
   n8n:
